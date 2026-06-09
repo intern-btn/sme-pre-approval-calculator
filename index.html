@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pre-Approval Kredit SME BTN</title>
+  <link rel="icon" type="image/png" href="btn-logo.png" />
   <style>
     /* 1. RESET & BASE */
     *,
@@ -546,7 +547,7 @@
   <!-- LANDING -->
   <section class="landing" id="landing">
     <div class="landing-inner">
-      <img src="btn-logo.png" alt="Bank BTN" class="landing-logo" />
+      <img src="btn-logo-wide.png" alt="Bank BTN" class="landing-logo" />
       <h1>Pre-Approval Kredit SME BTN</h1>
       <p>Hitung estimasi maksimal limit Kredit Modal Kerja berdasarkan siklus kas perusahaan Anda.</p>
       <button type="button" class="landing-button" id="btnMulai">Mulai Simulasi</button>
@@ -556,7 +557,7 @@
   <!-- CALCULATOR FORM -->
   <main class="calculator-page" id="kalkulator">
     <header class="calculator-header">
-      <img src="btn-logo.png" alt="Bank BTN" />
+      <img src="btn-logo-wide.png" alt="Bank BTN" />
       <h1>Pre-Approval Kredit SME BTN</h1>
     </header>
 
@@ -721,7 +722,7 @@
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwvdM1Gs1GZWvnvJsFv0Xl4lahS1_H_G38IpXcLysZYJWfCwDzykME9UkYTXX0Q0Eku/exec';
 
     function kirimKeSheet(hasil, nomorSurat) {
-      if (!SHEET_URL || SHEET_URL === 'https://script.google.com/macros/s/AKfycbwvdM1Gs1GZWvnvJsFv0Xl4lahS1_H_G38IpXcLysZYJWfCwDzykME9UkYTXX0Q0Eku/exec') return;
+      if (!SHEET_URL) return;
       var payload = {
         nomorSurat:            nomorSurat,
         namaNasabah:           getEl('namaNasabah')?.value   || '',

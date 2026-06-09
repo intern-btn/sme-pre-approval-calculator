@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="white"/>
+  <!-- b: vertical stem -->
+  <rect x="3" y="2" width="8" height="28" rx="4" fill="#1565C0"/>
+  <!-- b: bowl outer circle -->
+  <circle cx="19" cy="21" r="10" fill="#1565C0"/>
+  <!-- b: bowl inner cutout -->
+  <circle cx="19" cy="21" r="5.5" fill="white"/>
+  <!-- b: fill gap between stem and bowl -->
+  <rect x="3" y="13" width="16" height="8" fill="#1565C0"/>
+  <!-- red accent swoosh (simplified) -->
+  <ellipse cx="25" cy="5" rx="5" ry="2.5" transform="rotate(-20 25 5)" fill="#E80025"/>
+</svg>
