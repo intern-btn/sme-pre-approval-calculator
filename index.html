@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-Approval Kredit SME BTN</title>
+  <style>
+    /* 1. RESET & BASE */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* 2. DESIGN TOKENS */
+    :root {
+      --color-primary: #003d7a;
+      --color-primary-dark: #002d5a;
+      --color-accent: #e84e0f;
+      --color-danger: #E80025;
+      --color-bg: #F9FAFB;
+      --color-surface: #ffffff;
+      --color-border: #E5E7EB;
+      --color-border-input: #D1D5DB;
+      --color-text-primary: #374151;
+      --color-text-secondary: #6B7280;
+      --color-text-white: #ffffff;
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.07);
+      --radius-card: 12px;
+      --radius-input: 8px;
+    }
+
+    /* 3. TYPOGRAPHY */
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: inherit;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      color: var(--color-primary);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      color: var(--color-text-primary);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    label,
+    .section-label,
+    .result-label {
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .intro,
+    .caption,
+    .helper-text {
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* 4. LANDING */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px;
+      background: var(--color-primary);
+    }
+
+    .landing-inner {
+      width: min(100%, 640px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      color: var(--color-text-white);
+    }
+
+    .landing-logo {
+      width: auto;
+      height: 56px;
+      margin-bottom: 32px;
+      object-fit: contain;
+    }
+
+    .landing h1 {
+      max-width: 620px;
+      margin-bottom: 16px;
+    }
+
+    .landing p {
+      max-width: 520px;
+      margin-bottom: 32px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 17px;
+    }
+
+    /* 5. CALCULATOR LAYOUT */
+    .calculator-page {
+      width: min(100%, 640px);
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .calculator-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 24px 0 8px;
+      text-align: center;
+    }
+
+    .calculator-header h1 {
+      max-width: 560px;
+      color: var(--color-text-primary);
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .calculator-header img {
+      width: auto;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    /* 6. CARDS */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+
+    .card-header {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .tenor-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .tenor-option {
+      position: relative;
+    }
+
+    .tenor-option input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .tenor-option span {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      border: 1px solid var(--color-border-input);
+      border-radius: var(--radius-input);
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+      font-weight: 600;
+      text-align: center;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, outline-color 160ms ease;
+    }
+
+    .tenor-option input:checked + span {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      color: var(--color-text-white);
+    }
+
+    .tenor-option input:focus + span {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 1px;
+    }
+
+    /* 7. FORM - INPUTS & LABELS */
+    input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--color-border-input);
+      border-radius: var(--radius-input);
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+      outline: none;
+      transition: border-color 160ms ease, outline-color 160ms ease;
+    }
+
+    input:focus {
+      border-color: var(--color-primary);
+      outline: 2px solid var(--color-primary);
+      outline-offset: 1px;
+    }
+
+    input[readonly] {
+      background: var(--color-bg);
+      color: var(--color-text-secondary);
+      cursor: default;
+    }
+
+    .rupiah-input {
+      text-align: left;
+    }
+
+    /* 8. RESULTS */
+    .results-card {
+      display: none;
+      border-left: 4px solid var(--color-primary);
+    }
+
+    .result-section {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-section + .result-section {
+      padding-top: 20px;
+      margin-top: 20px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .result-table {
+      display: grid;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .result-row:last-child {
+      border-bottom: 0;
+    }
+
+    .result-value {
+      color: var(--color-text-primary);
+      font-size: 15px;
+      font-weight: 700;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .limit-highlight {
+      margin-top: 12px;
+      padding: 16px;
+      border-left: 4px solid var(--color-primary);
+      border-radius: 8px;
+      background: var(--color-bg);
+    }
+
+    .limit-highlight .result-value {
+      margin-top: 4px;
+      color: var(--color-primary);
+      font-size: 26px;
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .warning-box {
+      display: none;
+      padding: 12px;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* 9. BUTTONS */
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--color-primary);
+      color: var(--color-text-white);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .landing-button {
+      width: auto;
+      min-width: 220px;
+      background: var(--color-text-white);
+      color: var(--color-primary);
+    }
+
+    .landing-button:hover {
+      background: #F3F4F6;
+      color: var(--color-primary-dark);
+    }
+
+    #btnCetak {
+      display: none;
+    }
+
+    /* 10. VALIDATION ERRORS */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(17, 24, 39, 0.48);
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: min(100%, 420px);
+      padding: 24px;
+      border-radius: var(--radius-card);
+      background: var(--color-surface);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-panel h2 {
+      margin-bottom: 8px;
+      color: var(--color-primary);
+      font-size: 20px;
+    }
+
+    .modal-panel p {
+      color: var(--color-text-primary);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .modal-note {
+      margin-top: 10px;
+      color: var(--color-text-secondary) !important;
+      font-size: 13px !important;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .modal-actions .btn-primary {
+      width: auto;
+      min-width: 120px;
+    }
+
+    .error-box {
+      display: none;
+      padding: 12px;
+      border: 1px solid var(--color-danger);
+      border-radius: 8px;
+      background: #fff1f2;
+      color: var(--color-danger);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .error-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .field-error {
+      border-color: var(--color-danger) !important;
+      outline-color: var(--color-danger) !important;
+    }
+
+    /* 11. PRINT STYLES */
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      body > :not(.print-letter) {
+        display: none !important;
+      }
+
+      .print-letter {
+        display: block !important;
+      }
+    }
+
+    /* 12. RESPONSIVE (max-width: 640px) */
+    @media (max-width: 640px) {
+      .landing {
+        padding: 32px 16px;
+      }
+
+      .landing-logo {
+        height: 48px;
+        margin-bottom: 24px;
+      }
+
+      .landing h1 {
+        font-size: 28px;
+      }
+
+      .landing p {
+        font-size: 15px;
+      }
+
+      .calculator-page {
+        padding: 16px 12px 32px;
+      }
+
+      .calculator-header {
+        gap: 10px;
+        padding: 20px 0 4px;
+      }
+
+      .calculator-header h1 {
+        max-width: 340px;
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .tenor-options {
+        grid-template-columns: 1fr;
+      }
+
+      .result-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .result-value {
+        text-align: left;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+
+      .landing-button {
+        width: auto;
+        min-width: 220px;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LANDING -->
+  <section class="landing" id="landing">
+    <div class="landing-inner">
+      <img src="btn-logo.png" alt="Bank BTN" class="landing-logo" />
+      <h1>Pre-Approval Kredit SME BTN</h1>
+      <p>Hitung estimasi maksimal limit Kredit Modal Kerja berdasarkan siklus kas perusahaan Anda.</p>
+      <button type="button" class="landing-button" id="btnMulai">Mulai Simulasi</button>
+    </div>
+  </section>
+
+  <!-- CALCULATOR FORM -->
+  <main class="calculator-page" id="kalkulator">
+    <header class="calculator-header">
+      <img src="btn-logo.png" alt="Bank BTN" />
+      <h1>Pre-Approval Kredit SME BTN</h1>
+    </header>
+
+    <div class="stack">
+      <section class="card">
+        <div class="card-header">
+          <h2>Data Nasabah</h2>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="namaNasabah">Nama Lengkap</label>
+            <input type="text" id="namaNasabah" autocomplete="name" placeholder="Contoh: Budi Santoso" />
+          </div>
+          <div class="field">
+            <label for="noTelfNasabah">No. Telepon</label>
+            <input type="text" id="noTelfNasabah" maxlength="15" inputmode="numeric" autocomplete="tel" placeholder="Contoh: 081234567890" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+          </div>
+          <div class="field">
+            <label for="nikNasabah">NIK</label>
+            <input type="text" id="nikNasabah" maxlength="16" inputmode="numeric" autocomplete="off" placeholder="Contoh: 3171234567890001" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+          </div>
+          <div class="field">
+            <label for="npwpNasabah">NPWP</label>
+            <input type="text" id="npwpNasabah" maxlength="20" inputmode="numeric" autocomplete="off" placeholder="Contoh: 12.345.678.9-012.345" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Data Keuangan Perusahaan</h2>
+          <p class="intro">Masukkan data dari laporan keuangan tahunan perusahaan Anda.</p>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="persediaan">Nilai Persediaan Barang</label>
+            <input type="text" id="persediaan" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 740.000.000" />
+          </div>
+          <div class="field">
+            <label for="hpp">Harga Pokok Penjualan (HPP)</label>
+            <input type="text" id="hpp" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 4.800.000.000" />
+          </div>
+          <div class="field">
+            <label for="piutangUsaha">Total Piutang Usaha</label>
+            <input type="text" id="piutangUsaha" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 650.000.000" />
+          </div>
+          <div class="field">
+            <label for="penjualan">Total Penjualan Tahunan (1 tahun)</label>
+            <input type="text" id="penjualan" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 6.000.000.000" />
+          </div>
+          <div class="field">
+            <label for="hutangUsaha">Total Hutang Usaha</label>
+            <input type="text" id="hutangUsaha" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 560.000.000" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Parameter Angsuran</h2>
+        </div>
+        <div class="field">
+          <label>Jangka Waktu</label>
+          <div class="tenor-options" id="tenorOptions">
+            <label class="tenor-option">
+              <input type="radio" name="tenorAngsuran" value="12" checked />
+              <span>1 Tahun</span>
+            </label>
+            <label class="tenor-option">
+              <input type="radio" name="tenorAngsuran" value="24" />
+              <span>2 Tahun</span>
+            </label>
+            <label class="tenor-option">
+              <input type="radio" name="tenorAngsuran" value="36" />
+              <span>3 Tahun</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <div class="error-box" id="errorBox" role="alert"></div>
+      <button type="button" class="btn-primary" id="btnHitung">Hitung Limit Kredit Modal Kerja</button>
+
+      <!-- RESULTS (hidden by default) -->
+      <section class="card results-card" id="hasilSection" aria-live="polite">
+        <div class="card-header">
+          <h2>Hasil Simulasi Limit KMK</h2>
+        </div>
+
+        <div class="warning-box" id="warningBox"></div>
+
+        <div class="result-section">
+          <h3>Perputaran Kas (Cash Conversion Cycle)</h3>
+          <div class="result-table">
+            <div class="result-row">
+              <div class="result-label">Days of Inventory (DOI)</div>
+              <div class="result-value" id="hasilDoi">0 hari</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Days of Receivables (DOR)</div>
+              <div class="result-value" id="hasilDor">0 hari</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Days of Payables (DOP)</div>
+              <div class="result-value" id="hasilDop">0 hari</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Cash to Cash (C to C)</div>
+              <div class="result-value" id="hasilCtocHari">0 hari</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">C to C disetarakan</div>
+              <div class="result-value" id="hasilCtocBulan">0 bulan</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <h3>Perhitungan Limit</h3>
+          <div class="result-table">
+            <div class="result-row">
+              <div class="result-label">Nilai Penjualan Bulanan</div>
+              <div class="result-value" id="hasilPenjualanBulanan">Rp0</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">Nilai Penjualan x C to C</div>
+              <div class="result-value" id="hasilPenjualanCtoc">Rp0</div>
+            </div>
+          </div>
+          <div class="limit-highlight">
+            <div class="result-label">Limit Maksimal KMK</div>
+            <div class="result-value" id="hasilLimit">Rp0</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- PRINT BUTTON (hidden by default) -->
+      <button type="button" class="btn-primary" id="btnCetak">Ajukan Kredit Modal Kerja Anda</button>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="eligibilityModal" role="dialog" aria-modal="true" aria-labelledby="eligibilityTitle" aria-describedby="eligibilityMessage">
+    <div class="modal-panel">
+      <h2 id="eligibilityTitle">Status Pengajuan</h2>
+      <p id="eligibilityMessage"></p>
+      <p class="modal-note">Hasil ini bersifat indikatif dan bukan merupakan persetujuan kredit final dari Bank BTN.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn-primary" id="btnTutupEligibility">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Constants
+    const HARI_SETAHUN = 360;
+    const HARI_PER_BULAN = 30;
+    const BULAN_SETAHUN = 12;
+    const LIMIT_FACTOR = 0.80;
+
+    // Google Sheets endpoint — paste your Apps Script Web App URL here
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwvdM1Gs1GZWvnvJsFv0Xl4lahS1_H_G38IpXcLysZYJWfCwDzykME9UkYTXX0Q0Eku/exec';
+
+    function kirimKeSheet(hasil, nomorSurat) {
+      if (!SHEET_URL || SHEET_URL === 'https://script.google.com/macros/s/AKfycbwvdM1Gs1GZWvnvJsFv0Xl4lahS1_H_G38IpXcLysZYJWfCwDzykME9UkYTXX0Q0Eku/exec') return;
+      var payload = {
+        nomorSurat:            nomorSurat,
+        namaNasabah:           getEl('namaNasabah')?.value   || '',
+        noTelfNasabah:         getEl('noTelfNasabah')?.value || '',
+        nikNasabah:            getEl('nikNasabah')?.value    || '',
+        npwpNasabah:           getEl('npwpNasabah')?.value   || '',
+        persediaan:            parseRupiah(getEl('persediaan')?.value),
+        hpp:                   parseRupiah(getEl('hpp')?.value),
+        piutangUsaha:          parseRupiah(getEl('piutangUsaha')?.value),
+        penjualan:             parseRupiah(getEl('penjualan')?.value),
+        hutangUsaha:           parseRupiah(getEl('hutangUsaha')?.value),
+        doi:                   Math.round(hasil.doi),
+        dor:                   Math.round(hasil.dor),
+        dop:                   Math.round(hasil.dop),
+        ctocHari:              Math.round(hasil.ctocHari),
+        ctocBulan:             hasil.ctocBulan,
+        nilaiPenjualanBulanan: hasil.nilaiPenjualanBulanan,
+        nilaiPenjualanCtoc:    hasil.nilaiPenjualanCtoc,
+        limitMaksimal:         hasil.limitMaksimal,
+        tenorAngsuranBulan:    hasil.tenorAngsuranBulan,
+        statusKelayakan:       hasil.limitMaksimal > 0 ? 'Layak' : 'Belum Layak'
+      };
+      fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(payload)
+      }).catch(function() {});
+    }
+
+    let hasilTerakhir = null;
+
+    // 2. Currency helpers (formatRupiah, parseRupiah, handleRupiahInput)
+    function getEl(id) {
+      return document.getElementById(id);
+    }
+
+    function parseRupiah(value) {
+      if (value === null || value === undefined) return 0;
+      const clean = String(value).replace(/\./g, '').replace(/[^0-9]/g, '');
+      const parsed = Number(clean);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function formatRupiah(value) {
+      const rounded = Math.round(Number(value) || 0);
+      return 'Rp' + rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function formatNumber(value, decimals = 2) {
+      const numeric = Number(value) || 0;
+      const fixed = numeric.toFixed(decimals);
+      return fixed.replace(/\.?0+$/, '').replace('.', ',');
+    }
+
+    function getSelectedTenorAngsuran() {
+      const selected = document.querySelector('input[name="tenorAngsuran"]:checked');
+      return Number(selected?.value || 12);
+    }
+
+    function formatTenorDisplay(bulan) {
+      const tahun = bulan / BULAN_SETAHUN;
+      return bulan + ' bulan (' + tahun + ' tahun)';
+    }
+
+    function handleRupiahInput(event) {
+      const el = event.target;
+      const raw = el.value.replace(/\./g, '').replace(/[^0-9]/g, '');
+      const pos = el.selectionStart;
+      const oldLen = el.value.length;
+      if (raw === '') {
+        el.value = '';
+        return;
+      }
+      el.value = raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      const newLen = el.value.length;
+      const nextPos = Math.max(0, pos + (newLen - oldLen));
+      el.setSelectionRange(nextPos, nextPos);
+    }
+
+    function formatNpwp(value) {
+      const digits = String(value).replace(/[^0-9]/g, '').slice(0, 15);
+      const groups = [
+        digits.slice(0, 2),
+        digits.slice(2, 5),
+        digits.slice(5, 8),
+        digits.slice(8, 9),
+        digits.slice(9, 12),
+        digits.slice(12, 15)
+      ].filter(Boolean);
+
+      let formatted = groups[0] || '';
+      if (groups[1]) formatted += '.' + groups[1];
+      if (groups[2]) formatted += '.' + groups[2];
+      if (groups[3]) formatted += '.' + groups[3];
+      if (groups[4]) formatted += '-' + groups[4];
+      if (groups[5]) formatted += '.' + groups[5];
+      return formatted;
+    }
+
+    function handleNpwpInput(event) {
+      event.target.value = formatNpwp(event.target.value);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 3. Validation
+    function clearValidation() {
+      const errorBox = getEl('errorBox');
+      if (errorBox) {
+        errorBox.innerHTML = '';
+        errorBox.style.display = 'none';
+      }
+
+      document.querySelectorAll('.field-error').forEach((el) => {
+        el.classList.remove('field-error');
+      });
+    }
+
+    function showErrors(errors) {
+      const errorBox = getEl('errorBox');
+      if (!errorBox) return;
+      errorBox.innerHTML = '<ul>' + errors.map((error) => '<li>' + escapeHtml(error) + '</li>').join('') + '</ul>';
+      errorBox.style.display = 'block';
+    }
+
+    function markError(id) {
+      const el = getEl(id);
+      if (el) el.classList.add('field-error');
+    }
+
+    function showEligibilityPopup(hasil) {
+      const modal = getEl('eligibilityModal');
+      const title = getEl('eligibilityTitle');
+      const message = getEl('eligibilityMessage');
+      if (!modal || !title || !message) return;
+
+      const eligible = hasil.limitMaksimal > 0;
+      title.textContent = eligible ? 'Berpotensi Layak untuk Pengajuan' : 'Belum Layak untuk Pengajuan';
+      message.textContent = eligible
+        ? `Berdasarkan simulasi awal, nasabah berpotensi layak untuk melanjutkan pengajuan Kredit Modal Kerja dengan estimasi limit ${formatRupiah(hasil.limitMaksimal)}.`
+        : 'Berdasarkan simulasi awal, nasabah belum memenuhi indikasi kelayakan karena estimasi limit Kredit Modal Kerja bernilai nol atau negatif.';
+      modal.classList.add('is-open');
+    }
+
+    function closeEligibilityPopup() {
+      const modal = getEl('eligibilityModal');
+      if (modal) modal.classList.remove('is-open');
+    }
+
+    function scrollToResults() {
+      const hasilSection = getEl('hasilSection');
+      if (hasilSection) {
+        hasilSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function validasiInput() {
+      clearValidation();
+
+      const errors = [];
+      const requiredText = [
+        ['namaNasabah', 'Nama Lengkap wajib diisi.'],
+        ['noTelfNasabah', 'No. Telepon wajib diisi.'],
+        ['nikNasabah', 'NIK wajib diisi.'],
+        ['npwpNasabah', 'NPWP wajib diisi.']
+      ];
+      const requiredCurrency = [
+        ['persediaan', 'Persediaan wajib diisi.'],
+        ['hpp', 'HPP / COGS wajib diisi.'],
+        ['piutangUsaha', 'Piutang Usaha wajib diisi.'],
+        ['penjualan', 'Penjualan tahunan wajib diisi.'],
+        ['hutangUsaha', 'Hutang Usaha wajib diisi.']
+      ];
+
+      requiredText.forEach(([id, message]) => {
+        const value = getEl(id)?.value.trim() || '';
+        if (!value) {
+          errors.push(message);
+          markError(id);
+        }
+      });
+
+      const nik = getEl('nikNasabah')?.value.trim() || '';
+      if (nik && nik.length !== 16) {
+        errors.push('NIK harus berisi 16 digit.');
+        markError('nikNasabah');
+      }
+
+      const npwpDigits = (getEl('npwpNasabah')?.value || '').replace(/[^0-9]/g, '');
+      if (npwpDigits && npwpDigits.length !== 15) {
+        errors.push('NPWP harus berisi 15 digit.');
+        markError('npwpNasabah');
+      }
+
+      requiredCurrency.forEach(([id, message]) => {
+        const raw = getEl(id)?.value.trim() || '';
+        if (!raw) {
+          errors.push(message);
+          markError(id);
+        }
+      });
+
+      const hpp = parseRupiah(getEl('hpp')?.value);
+      const penjualan = parseRupiah(getEl('penjualan')?.value);
+
+      if (getEl('hpp')?.value.trim() && hpp === 0) {
+        errors.push('HPP / COGS tidak boleh 0 karena DOI dan DOP tidak dapat dihitung.');
+        markError('hpp');
+      }
+
+      if (getEl('penjualan')?.value.trim() && penjualan === 0) {
+        errors.push('Penjualan tahunan tidak boleh 0 karena DOR dan penjualan bulanan tidak dapat dihitung.');
+        markError('penjualan');
+      }
+
+      if (errors.length > 0) {
+        showErrors(errors);
+        getEl('hasilSection').style.display = 'none';
+        getEl('btnCetak').style.display = 'none';
+        return false;
+      }
+
+      return true;
+    }
+
+    // 4. Core calculation (hitungKMK)
+    function hitungKMK() {
+      if (!validasiInput()) return null;
+
+      const persediaan = parseRupiah(getEl('persediaan').value);
+      const hpp = parseRupiah(getEl('hpp').value);
+      const piutangUsaha = parseRupiah(getEl('piutangUsaha').value);
+      const penjualan = parseRupiah(getEl('penjualan').value);
+      const hutangUsaha = parseRupiah(getEl('hutangUsaha').value);
+
+      const doi = (persediaan / hpp) * HARI_SETAHUN;
+      const dor = (piutangUsaha / penjualan) * HARI_SETAHUN;
+      const dop = (hutangUsaha / hpp) * HARI_SETAHUN;
+      const ctocHari = doi + dor - dop;
+      const ctocBulan = ctocHari / HARI_PER_BULAN;
+      const nilaiPenjualanBulanan = penjualan / BULAN_SETAHUN;
+      const nilaiPenjualanCtoc = nilaiPenjualanBulanan * ctocBulan;
+      const limitMaksimal = nilaiPenjualanCtoc * LIMIT_FACTOR;
+      const tenorAngsuranBulan = getSelectedTenorAngsuran();
+
+      hasilTerakhir = {
+        doi,
+        dor,
+        dop,
+        ctocHari,
+        ctocBulan,
+        nilaiPenjualanBulanan,
+        nilaiPenjualanCtoc,
+        limitMaksimal,
+        tenorAngsuranBulan
+      };
+
+      renderHasil(hasilTerakhir);
+      scrollToResults();
+      showEligibilityPopup(hasilTerakhir);
+      return hasilTerakhir;
+    }
+
+    // 5. Results renderer
+    function renderHasil(hasil) {
+      getEl('hasilDoi').textContent = Math.round(hasil.doi) + ' hari';
+      getEl('hasilDor').textContent = Math.round(hasil.dor) + ' hari';
+      getEl('hasilDop').textContent = Math.round(hasil.dop) + ' hari';
+      getEl('hasilCtocHari').textContent = Math.round(hasil.ctocHari) + ' hari';
+      getEl('hasilCtocBulan').textContent = formatNumber(hasil.ctocBulan, 2) + ' bulan';
+      getEl('hasilPenjualanBulanan').textContent = formatRupiah(hasil.nilaiPenjualanBulanan);
+      getEl('hasilPenjualanCtoc').textContent = formatRupiah(hasil.nilaiPenjualanCtoc);
+      getEl('hasilLimit').textContent = formatRupiah(hasil.limitMaksimal);
+
+      const warningBox = getEl('warningBox');
+      if (hasil.ctocHari <= 0) {
+        warningBox.textContent = 'Cash to Cash bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena hutang usaha melebihi siklus persediaan dan piutang.';
+        warningBox.style.display = 'block';
+      } else {
+        warningBox.textContent = '';
+        warningBox.style.display = 'none';
+      }
+
+      getEl('hasilSection').style.display = 'block';
+      getEl('btnCetak').style.display = 'block';
+    }
+
+    // 6. Print letter builder (cetakHasil)
+    function getTanggalSurat() {
+      const now = new Date();
+      const dd = String(now.getDate()).padStart(2, '0');
+      const bulanNama = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][now.getMonth()];
+      const bulanRomawi = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'][now.getMonth()];
+      const yyyy = now.getFullYear();
+      return {
+        tanggalLengkap: `Jakarta, ${dd} ${bulanNama} ${yyyy}`,
+        bulanRomawi,
+        yyyy
+      };
+    }
+
+    function buildPrintHtml(nomorSurat) {
+      const hasil = hasilTerakhir;
+      if (!hasil) return '';
+
+      const namaNasabah = getEl('namaNasabah')?.value || '-';
+      const noTelfNasabah = getEl('noTelfNasabah')?.value || '-';
+      const npwpNasabah = getEl('npwpNasabah')?.value || '-';
+      const tanggal = getTanggalSurat();
+
+      return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surat Simulasi KMK BTN</title>
+  <style>
+    @page { size: A4 portrait; margin: 25mm; }
+    body {
+      margin: 0;
+      color: #000;
+      font-family: "Arial Narrow", Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.2;
+    }
+    .print-letter {
+      width: 100%;
+    }
+    p {
+      margin: 0 0 8pt;
+      text-align: justify;
+    }
+    .right {
+      text-align: right;
+      margin-bottom: 18pt;
+    }
+    .spaced {
+      margin-bottom: 14pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8pt 0 14pt;
+    }
+    td {
+      padding: 3pt 4pt;
+      vertical-align: top;
+    }
+    td:first-child {
+      width: 190pt;
+    }
+    td:nth-child(2) {
+      width: 10pt;
+    }
+    .term-section {
+      margin: 12pt 0 12pt;
+    }
+    .term-heading {
+      margin-bottom: 6pt;
+      font-weight: bold;
+    }
+    .requirements {
+      margin: 0 0 8pt 20pt;
+      padding-left: 12pt;
+    }
+    .requirements li {
+      margin-bottom: 4pt;
+      text-align: justify;
+    }
+    .signature {
+      margin-top: 28pt;
+      width: 50%;
+      margin-left: 50%;
+      text-align: center;
+    }
+    .signature p {
+      margin-bottom: 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="print-letter">
+    <p class="right">${tanggal.tanggalLengkap}</p>
+
+    <p><b>Nomor</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${nomorSurat}</p>
+    <p class="spaced"><b>Lamp</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
+
+    <p><b>Kepada Yth.</b></p>
+    <p><b>Bapak/Ibu, ${escapeHtml(namaNasabah)}</b></p>
+    <p class="spaced"><b>Perihal &nbsp;&nbsp;&nbsp;&nbsp;: Simulasi Limit Kredit Modal Kerja</b></p>
+
+    <p>Dengan Hormat,</p>
+    <p>Berdasarkan data keuangan yang disampaikan, berikut estimasi indikatif limit Kredit Modal Kerja yang dapat menjadi bahan awal pengajuan fasilitas kredit di Bank BTN.</p>
+
+    <div class="term-section">
+      <div class="term-heading">Fasilitas Kredit</div>
+      <table>
+        <tr><td>Limit Kredit</td><td>:</td><td>&plusmn; ${formatRupiah(hasil.limitMaksimal)}</td></tr>
+        <tr><td>Peruntukkan</td><td>:</td><td>Modal Kerja</td></tr>
+        <tr><td>Jangka Waktu</td><td>:</td><td>${formatTenorDisplay(hasil.tenorAngsuranBulan)}</td></tr>
+        <tr><td>Provisi</td><td>:</td><td>1%</td></tr>
+        <tr><td>Administrasi</td><td>:</td><td>0,25%</td></tr>
+      </table>
+    </div>
+
+    <p>Hasil simulasi ini hanya merupakan estimasi awal dan bukan persetujuan kredit. Keputusan akhir akan ditentukan berdasarkan analisis dan kebijakan Bank BTN.</p>
+    <p>Untuk keperluan analisa lebih lanjut, Kami harapkan kesediaan PT .................... untuk dapat menyampaikan beberapa hal sebagai berikut :</p>
+    <ol class="requirements">
+      <li>Surat Permohonan.</li>
+      <li>Copy Dokumen Legalitas meliputi Akta Pendirian dan dokumen pendukung lainnya.</li>
+      <li>Copy Dokumen Keuangan meliputi Laporan Keuangan 3 tahun terakhir sampai dengan saat ini dan dokumen relevan lainnya.</li>
+      <li>Copy Dokumen Bukti Kepemilikan Jaminan, yang selanjutnya dilakukan penilaian oleh KJPP rekanan BTN.</li>
+    </ol>
+    <p>Syarat dan ketentuan diatas merupakan suatu indikasi atas penawaran fasilitas kredit dan tidak bersifat mengikat (subject to review), serta dapat dibiayai sepanjang feasible dan bankable menurut penilaian Bank BTN. Penawaran/persetujuan final akan kami sampaikan kemudian setelah mendapat keputusan sesuai dengan ketentuan yang berlaku.</p>
+    <p>Demikian kami sampaikan, atas perhatian dan Kerjasama Saudara kami ucapkan terima kasih.</p>
+
+    <div class="signature">
+      <p><b>PT. BANK TABUNGAN NEGARA (Persero), Tbk.</b></p>
+      <p><b>BUSINESS BANKING DIVISION</b></p>
+    </div>
+  </div>
+</body>
+</html>`;
+    }
+
+    function cetakHasil() {
+      const hasil = hasilTerakhir || hitungKMK();
+      if (!hasil) return;
+
+      const counter = parseInt(localStorage.getItem('suratKMKCounter') || '0', 10) + 1;
+      localStorage.setItem('suratKMKCounter', String(counter));
+      const tanggal = getTanggalSurat();
+      const nomorSurat = String(counter).padStart(3, '0') + '/S/KMK/' + tanggal.bulanRomawi + '/' + tanggal.yyyy;
+
+      kirimKeSheet(hasil, nomorSurat);
+
+      const printHtml = buildPrintHtml(nomorSurat);
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('Pop-up diblokir browser. Mohon izinkan pop-up untuk mencetak surat.');
+        return;
+      }
+
+      printWindow.document.open();
+      printWindow.document.write(printHtml);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+
+    // 7. DOM event listeners (DOMContentLoaded)
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.rupiah-input').forEach((el) => {
+        el.addEventListener('input', handleRupiahInput);
+      });
+
+      const npwpNasabah = getEl('npwpNasabah');
+      if (npwpNasabah) npwpNasabah.addEventListener('input', handleNpwpInput);
+
+      const btnTutupEligibility = getEl('btnTutupEligibility');
+      if (btnTutupEligibility) btnTutupEligibility.addEventListener('click', closeEligibilityPopup);
+
+      const eligibilityModal = getEl('eligibilityModal');
+      if (eligibilityModal) {
+        eligibilityModal.addEventListener('click', function(event) {
+          if (event.target === eligibilityModal) closeEligibilityPopup();
+        });
+      }
+
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') closeEligibilityPopup();
+      });
+
+      getEl('btnMulai').addEventListener('click', function() {
+        getEl('kalkulator').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      getEl('btnHitung').addEventListener('click', hitungKMK);
+      getEl('btnCetak').addEventListener('click', cetakHasil);
+    });
+  </script>
+</body>
+</html>
