@@ -889,9 +889,9 @@
 
       const eligible = hasil.limitMaksimal > 0;
       title.textContent = eligible ? 'Berpotensi Layak untuk Pengajuan' : 'Belum Layak untuk Pengajuan';
-      message.textContent = eligible
-        ? `Berdasarkan simulasi awal, nasabah berpotensi layak untuk melanjutkan pengajuan Kredit Modal Kerja dengan estimasi limit ${formatRupiah(hasil.limitMaksimal)}.`
-        : 'Berdasarkan simulasi awal, nasabah belum memenuhi indikasi kelayakan karena estimasi limit Kredit Modal Kerja bernilai nol atau negatif.';
+      message.innerHTML = eligible
+        ? `Berdasarkan simulasi awal, nasabah berpotensi <strong>layak</strong> untuk melanjutkan pengajuan Kredit Modal Kerja dengan estimasi limit ${formatRupiah(hasil.limitMaksimal)}.`
+        : 'Berdasarkan simulasi awal, nasabah <strong>belum layak</strong> karena estimasi limit Kredit Modal Kerja bernilai nol atau negatif.';
       modal.classList.add('is-open');
     }
 
