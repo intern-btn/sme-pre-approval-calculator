@@ -250,7 +250,8 @@
     }
 
     /* 7. FORM - INPUTS & LABELS */
-    input {
+    input,
+    select {
       width: 100%;
       min-height: 44px;
       padding: 10px 12px;
@@ -262,7 +263,8 @@
       transition: border-color 160ms ease, outline-color 160ms ease;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: var(--color-primary);
       outline: 2px solid var(--color-primary);
       outline-offset: 1px;
@@ -274,8 +276,34 @@
       cursor: default;
     }
 
+    input[type="checkbox"] {
+      width: 18px;
+      min-height: 18px;
+      height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--color-primary);
+    }
+
     .rupiah-input {
       text-align: left;
+    }
+
+    .consent-field {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: flex-start;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .consent-field span {
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0;
+      line-height: 1.45;
+      text-transform: none;
     }
 
     /* 8. RESULTS */
@@ -406,6 +434,11 @@
     }
 
     #btnCetak {
+      display: none;
+    }
+
+    #formNonKpp,
+    #hasilNonKpp {
       display: none;
     }
 
@@ -585,6 +618,19 @@
     <div class="stack">
       <section class="card">
         <div class="card-header">
+          <h2>Jenis Produk</h2>
+        </div>
+        <div class="field">
+          <label for="jenisKredit">Pilih Produk Kredit Modal Kerja</label>
+          <select id="jenisKredit">
+            <option value="kpp">KUR Perumahan (Untuk Developer, Toko Bangunan, dan Kontraktor Perumahan)</option>
+            <option value="non-kpp">Non KUR Perumahan</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
           <h2>Data Nasabah</h2>
         </div>
         <div class="form-grid">
@@ -612,7 +658,7 @@
           <h2>Data Keuangan Perusahaan</h2>
           <p class="intro">Masukkan data dari laporan keuangan tahunan perusahaan Anda.</p>
         </div>
-        <div class="form-grid">
+        <div class="form-grid" id="formKpp">
           <div class="field">
             <label for="persediaan">Nilai Persediaan Barang</label>
             <input type="text" id="persediaan" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 740.000.000" />
@@ -632,6 +678,40 @@
           <div class="field">
             <label for="hutangUsaha">Total Hutang Usaha</label>
             <input type="text" id="hutangUsaha" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 560.000.000" />
+          </div>
+        </div>
+        <div class="form-grid" id="formNonKpp">
+          <div class="field">
+            <label for="kasBank">Rata-rata Kas/Bank</label>
+            <input type="text" id="kasBank" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 587.088.714" />
+          </div>
+          <div class="field">
+            <label for="penjualanNonKpp">Total Penjualan Tahunan</label>
+            <input type="text" id="penjualanNonKpp" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 15.521.051.782" />
+          </div>
+          <div class="field">
+            <label for="piutangNonKpp">Rata-rata Piutang</label>
+            <input type="text" id="piutangNonKpp" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 330.551.964" />
+          </div>
+          <div class="field">
+            <label for="persediaanNonKpp">Rata-rata Persediaan</label>
+            <input type="text" id="persediaanNonKpp" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 1.345.308.514" />
+          </div>
+          <div class="field">
+            <label for="hppNonKpp">HPP / Modal Usaha</label>
+            <input type="text" id="hppNonKpp" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 10.889.509.888" />
+          </div>
+          <div class="field">
+            <label for="totalAktivaLancar">Total Aktiva Lancar</label>
+            <input type="text" id="totalAktivaLancar" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 2.262.949.192" />
+          </div>
+          <div class="field">
+            <label for="disponibleKredit">Disponible Kredit (Apabila Ada)</label>
+            <input type="text" id="disponibleKredit" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 0" />
+          </div>
+          <div class="field">
+            <label for="pembayaranPihakLain">Pembayaran/Pelunasan kepada Pihak Lain</label>
+            <input type="text" id="pembayaranPihakLain" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 0" />
           </div>
         </div>
       </section>
@@ -659,6 +739,15 @@
         </div>
       </section>
 
+      <section class="card">
+        <div class="field">
+          <label class="consent-field">
+            <input type="checkbox" id="consentData" />
+            <span id="consentText">Saya menyetujui pengumpulan dan penggunaan data pribadi yang saya isi untuk keperluan simulasi awal, perkiraan, dan tindak lanjut pengajuan Kredit Modal Kerja oleh PT. Bank Tabungan Negara (Persero) Tbk.</span>
+          </label>
+        </div>
+      </section>
+
       <div class="error-box" id="errorBox" role="alert"></div>
       <button type="button" class="btn-primary" id="btnHitung">Hitung Limit Kredit Modal Kerja</button>
 
@@ -670,47 +759,113 @@
 
         <div class="warning-box" id="warningBox"></div>
 
-        <div class="result-section">
-          <h3>Perputaran Kas (Cash Conversion Cycle)</h3>
-          <div class="result-table">
-            <div class="result-row">
-              <div class="result-label">Days of Inventory (DOI)</div>
-              <div class="result-value" id="hasilDoi">0 hari</div>
+        <div id="hasilKpp">
+          <div class="result-section">
+            <h3>Perputaran Kas (Cash Conversion Cycle)</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Days of Inventory (DOI)</div>
+                <div class="result-value" id="hasilDoi">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Days of Receivables (DOR)</div>
+                <div class="result-value" id="hasilDor">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Days of Payables (DOP)</div>
+                <div class="result-value" id="hasilDop">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Cash to Cash (C to C)</div>
+                <div class="result-value" id="hasilCtocHari">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">C to C disetarakan</div>
+                <div class="result-value" id="hasilCtocBulan">0 bulan</div>
+              </div>
             </div>
-            <div class="result-row">
-              <div class="result-label">Days of Receivables (DOR)</div>
-              <div class="result-value" id="hasilDor">0 hari</div>
+          </div>
+
+          <div class="result-section">
+            <h3>Perhitungan Limit</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Nilai Penjualan Bulanan</div>
+                <div class="result-value" id="hasilPenjualanBulanan">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Nilai Penjualan x C to C</div>
+                <div class="result-value" id="hasilPenjualanCtoc">Rp0</div>
+              </div>
             </div>
-            <div class="result-row">
-              <div class="result-label">Days of Payables (DOP)</div>
-              <div class="result-value" id="hasilDop">0 hari</div>
-            </div>
-            <div class="result-row">
-              <div class="result-label">Cash to Cash (C to C)</div>
-              <div class="result-value" id="hasilCtocHari">0 hari</div>
-            </div>
-            <div class="result-row">
-              <div class="result-label">C to C disetarakan</div>
-              <div class="result-value" id="hasilCtocBulan">0 bulan</div>
+            <div class="limit-highlight">
+              <div class="result-label">Perkiraan Limit Maksimal KMK</div>
+              <div class="result-value" id="hasilLimit">Rp0</div>
             </div>
           </div>
         </div>
 
-        <div class="result-section">
-          <h3>Perhitungan Limit</h3>
-          <div class="result-table">
-            <div class="result-row">
-              <div class="result-label">Nilai Penjualan Bulanan</div>
-              <div class="result-value" id="hasilPenjualanBulanan">Rp0</div>
-            </div>
-            <div class="result-row">
-              <div class="result-label">Nilai Penjualan x C to C</div>
-              <div class="result-value" id="hasilPenjualanCtoc">Rp0</div>
+        <div id="hasilNonKpp">
+          <div class="result-section">
+            <h3>Lama Perputaran Modal Kerja</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Kas/Bank</div>
+                <div class="result-value" id="hasilLamaKas">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Piutang</div>
+                <div class="result-value" id="hasilLamaPiutang">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Persediaan</div>
+                <div class="result-value" id="hasilLamaPersediaan">0 hari</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Total</div>
+                <div class="result-value" id="hasilLamaMk">0 hari</div>
+              </div>
             </div>
           </div>
-          <div class="limit-highlight">
-            <div class="result-label">Limit Maksimal KMK</div>
-            <div class="result-value" id="hasilLimit">Rp0</div>
+
+          <div class="result-section">
+            <h3>Perputaran Modal Kerja</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Perputaran MK</div>
+                <div class="result-value" id="hasilPerputaranMk">0 kali</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h3>Kebutuhan Modal Kerja</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Kebutuhan Saat Ini</div>
+                <div class="result-value" id="hasilKebutuhanSekarang">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Kebutuhan MK</div>
+                <div class="result-value" id="hasilKebutuhanMk">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Modal Kerja Ada</div>
+                <div class="result-value" id="hasilModalKerjaAda">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Kebutuhan Bersih</div>
+                <div class="result-value" id="hasilKebutuhanBersih">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Pembayaran Pihak Lain</div>
+                <div class="result-value" id="hasilPembayaranPihakLain">Rp0</div>
+              </div>
+            </div>
+            <div class="limit-highlight">
+              <div class="result-label">Perkiraan Limit Maksimal KMK</div>
+              <div class="result-value" id="hasilLimitNonKpp">Rp0</div>
+            </div>
           </div>
         </div>
 
@@ -746,22 +901,43 @@
       if (!SHEET_URL) return;
       var payload = {
         nomorSurat:            nomorSurat,
+        jenisKredit:           hasil.jenisKredit || getSelectedJenisKredit(),
         namaNasabah:           getEl('namaNasabah')?.value   || '',
         noTelfNasabah:         getEl('noTelfNasabah')?.value || '',
         nikNasabah:            getEl('nikNasabah')?.value    || '',
         npwpNasabah:           getEl('npwpNasabah')?.value   || '',
+        consentGiven:          !!getEl('consentData')?.checked,
+        consentText:           getEl('consentText')?.textContent || '',
+        consentTimestamp:      new Date().toISOString(),
         persediaan:            parseRupiah(getEl('persediaan')?.value),
         hpp:                   parseRupiah(getEl('hpp')?.value),
         piutangUsaha:          parseRupiah(getEl('piutangUsaha')?.value),
         penjualan:             parseRupiah(getEl('penjualan')?.value),
         hutangUsaha:           parseRupiah(getEl('hutangUsaha')?.value),
-        doi:                   Math.round(hasil.doi),
-        dor:                   Math.round(hasil.dor),
-        dop:                   Math.round(hasil.dop),
-        ctocHari:              Math.round(hasil.ctocHari),
+        kasBank:               parseRupiah(getEl('kasBank')?.value),
+        penjualanNonKpp:       parseRupiah(getEl('penjualanNonKpp')?.value),
+        piutangNonKpp:         parseRupiah(getEl('piutangNonKpp')?.value),
+        persediaanNonKpp:      parseRupiah(getEl('persediaanNonKpp')?.value),
+        hppNonKpp:             parseRupiah(getEl('hppNonKpp')?.value),
+        totalAktivaLancar:     parseRupiah(getEl('totalAktivaLancar')?.value),
+        disponibleKredit:      parseRupiah(getEl('disponibleKredit')?.value),
+        pembayaranPihakLain:   parseRupiah(getEl('pembayaranPihakLain')?.value),
+        doi:                   Math.round(hasil.doi || 0),
+        dor:                   Math.round(hasil.dor || 0),
+        dop:                   Math.round(hasil.dop || 0),
+        ctocHari:              Math.round(hasil.ctocHari || 0),
         ctocBulan:             hasil.ctocBulan,
         nilaiPenjualanBulanan: hasil.nilaiPenjualanBulanan,
         nilaiPenjualanCtoc:    hasil.nilaiPenjualanCtoc,
+        lamaKas:               Math.round(hasil.lamaKas || 0),
+        lamaPiutang:           Math.round(hasil.lamaPiutang || 0),
+        lamaPersediaan:        Math.round(hasil.lamaPersediaan || 0),
+        lamaMk:                Math.round(hasil.lamaMk || 0),
+        perputaranMk:          hasil.perputaranMk,
+        kebutuhanSekarang:     hasil.kebutuhanSekarang,
+        kebutuhanMk:           hasil.kebutuhanMk,
+        modalKerjaAda:         hasil.modalKerjaAda,
+        kebutuhanBersih:       hasil.kebutuhanBersih,
         limitMaksimal:         hasil.limitMaksimal,
         tenorAngsuranBulan:    hasil.tenorAngsuranBulan,
         statusKelayakan:       hasil.limitMaksimal > 0 ? 'Layak' : 'Belum Layak'
@@ -801,6 +977,10 @@
     function getSelectedTenorAngsuran() {
       const selected = document.querySelector('input[name="tenorAngsuran"]:checked');
       return Number(selected?.value || 12);
+    }
+
+    function getSelectedJenisKredit() {
+      return getEl('jenisKredit')?.value || 'kmk';
     }
 
     function formatTenorDisplay(bulan) {
@@ -907,23 +1087,45 @@
       }
     }
 
+    function syncProductForm() {
+      const isCccProduct = getSelectedJenisKredit() !== 'non-kpp';
+      getEl('formKpp').style.display = isCccProduct ? 'grid' : 'none';
+      getEl('formNonKpp').style.display = isCccProduct ? 'none' : 'grid';
+      getEl('hasilSection').style.display = 'none';
+      getEl('btnCetak').style.display = 'none';
+      hasilTerakhir = null;
+      clearValidation();
+    }
+
     function validasiInput() {
       clearValidation();
 
       const errors = [];
+      const jenisKredit = getSelectedJenisKredit();
       const requiredText = [
         ['namaNasabah', 'Nama Lengkap wajib diisi.'],
         ['noTelfNasabah', 'No. Telepon wajib diisi.'],
         ['nikNasabah', 'NIK wajib diisi.'],
         ['npwpNasabah', 'NPWP wajib diisi.']
       ];
-      const requiredCurrency = [
-        ['persediaan', 'Persediaan wajib diisi.'],
-        ['hpp', 'HPP / COGS wajib diisi.'],
-        ['piutangUsaha', 'Piutang Usaha wajib diisi.'],
-        ['penjualan', 'Penjualan tahunan wajib diisi.'],
-        ['hutangUsaha', 'Hutang Usaha wajib diisi.']
-      ];
+      const requiredCurrency = jenisKredit !== 'non-kpp'
+        ? [
+          ['persediaan', 'Persediaan wajib diisi.'],
+          ['hpp', 'HPP / COGS wajib diisi.'],
+          ['piutangUsaha', 'Piutang Usaha wajib diisi.'],
+          ['penjualan', 'Penjualan tahunan wajib diisi.'],
+          ['hutangUsaha', 'Hutang Usaha wajib diisi.']
+        ]
+        : [
+          ['kasBank', 'Rata-rata Kas/Bank wajib diisi.'],
+          ['penjualanNonKpp', 'Total Penjualan Tahunan wajib diisi.'],
+          ['piutangNonKpp', 'Rata-rata Piutang wajib diisi.'],
+          ['persediaanNonKpp', 'Rata-rata Persediaan wajib diisi.'],
+          ['hppNonKpp', 'HPP / Modal Usaha wajib diisi.'],
+          ['totalAktivaLancar', 'Total Aktiva Lancar wajib diisi.'],
+          ['disponibleKredit', 'Disponible Kredit wajib diisi.'],
+          ['pembayaranPihakLain', 'Pembayaran/Pelunasan kepada Pihak Lain wajib diisi.']
+        ];
 
       requiredText.forEach(([id, message]) => {
         const value = getEl(id)?.value.trim() || '';
@@ -945,6 +1147,11 @@
         markError('npwpNasabah');
       }
 
+      if (!getEl('consentData')?.checked) {
+        errors.push('Persetujuan penggunaan data pribadi wajib dicentang sebelum simulasi dikirim.');
+        markError('consentData');
+      }
+
       requiredCurrency.forEach(([id, message]) => {
         const raw = getEl(id)?.value.trim() || '';
         if (!raw) {
@@ -953,17 +1160,49 @@
         }
       });
 
-      const hpp = parseRupiah(getEl('hpp')?.value);
-      const penjualan = parseRupiah(getEl('penjualan')?.value);
+      if (jenisKredit !== 'non-kpp') {
+        const hpp = parseRupiah(getEl('hpp')?.value);
+        const penjualan = parseRupiah(getEl('penjualan')?.value);
 
-      if (getEl('hpp')?.value.trim() && hpp === 0) {
-        errors.push('HPP / COGS tidak boleh 0 karena DOI dan DOP tidak dapat dihitung.');
-        markError('hpp');
-      }
+        if (getEl('hpp')?.value.trim() && hpp === 0) {
+          errors.push('HPP / COGS tidak boleh 0 karena DOI dan DOP tidak dapat dihitung.');
+          markError('hpp');
+        }
 
-      if (getEl('penjualan')?.value.trim() && penjualan === 0) {
-        errors.push('Penjualan tahunan tidak boleh 0 karena DOR dan penjualan bulanan tidak dapat dihitung.');
-        markError('penjualan');
+        if (getEl('penjualan')?.value.trim() && penjualan === 0) {
+          errors.push('Penjualan tahunan tidak boleh 0 karena DOR dan penjualan bulanan tidak dapat dihitung.');
+          markError('penjualan');
+        }
+      } else {
+        const penjualanNonKpp = parseRupiah(getEl('penjualanNonKpp')?.value);
+        const hppNonKpp = parseRupiah(getEl('hppNonKpp')?.value);
+        const kasBank = parseRupiah(getEl('kasBank')?.value);
+        const piutangNonKpp = parseRupiah(getEl('piutangNonKpp')?.value);
+        const persediaanNonKpp = parseRupiah(getEl('persediaanNonKpp')?.value);
+
+        if (getEl('penjualanNonKpp')?.value.trim() && penjualanNonKpp === 0) {
+          errors.push('Total Penjualan Tahunan tidak boleh 0 karena perputaran modal kerja tidak dapat dihitung.');
+          markError('penjualanNonKpp');
+        }
+
+        if (getEl('hppNonKpp')?.value.trim() && hppNonKpp === 0) {
+          errors.push('HPP / Modal Usaha tidak boleh 0 karena lama persediaan tidak dapat dihitung.');
+          markError('hppNonKpp');
+        }
+
+        if (
+          getEl('kasBank')?.value.trim() &&
+          getEl('piutangNonKpp')?.value.trim() &&
+          getEl('persediaanNonKpp')?.value.trim() &&
+          kasBank === 0 &&
+          piutangNonKpp === 0 &&
+          persediaanNonKpp === 0
+        ) {
+          errors.push('Kas/Bank, Piutang, dan Persediaan tidak boleh seluruhnya 0 karena perputaran modal kerja tidak dapat dihitung.');
+          markError('kasBank');
+          markError('piutangNonKpp');
+          markError('persediaanNonKpp');
+        }
       }
 
       if (errors.length > 0) {
@@ -976,10 +1215,8 @@
       return true;
     }
 
-    // 4. Core calculation (hitungKMK)
-    function hitungKMK() {
-      if (!validasiInput()) return null;
-
+    // 4. Core calculation
+    function hitungKpp(jenisKredit = 'kmk') {
       const persediaan = parseRupiah(getEl('persediaan').value);
       const hpp = parseRupiah(getEl('hpp').value);
       const piutangUsaha = parseRupiah(getEl('piutangUsaha').value);
@@ -996,7 +1233,13 @@
       const limitMaksimal = nilaiPenjualanCtoc * LIMIT_FACTOR;
       const tenorAngsuranBulan = getSelectedTenorAngsuran();
 
-      hasilTerakhir = {
+      return {
+        jenisKredit,
+        persediaan,
+        hpp,
+        piutangUsaha,
+        penjualan,
+        hutangUsaha,
         doi,
         dor,
         dop,
@@ -1007,6 +1250,59 @@
         limitMaksimal,
         tenorAngsuranBulan
       };
+    }
+
+    function hitungNonKpp() {
+      const kasBank = parseRupiah(getEl('kasBank').value);
+      const penjualan = parseRupiah(getEl('penjualanNonKpp').value);
+      const piutang = parseRupiah(getEl('piutangNonKpp').value);
+      const persediaan = parseRupiah(getEl('persediaanNonKpp').value);
+      const hpp = parseRupiah(getEl('hppNonKpp').value);
+      const totalAktivaLancar = parseRupiah(getEl('totalAktivaLancar').value);
+      const disponibleKredit = parseRupiah(getEl('disponibleKredit').value);
+      const pembayaranPihakLain = parseRupiah(getEl('pembayaranPihakLain').value);
+      const tenorAngsuranBulan = getSelectedTenorAngsuran();
+
+      const lamaKas = (kasBank / penjualan) * HARI_SETAHUN;
+      const lamaPiutang = (piutang / penjualan) * HARI_SETAHUN;
+      const lamaPersediaan = (persediaan / hpp) * HARI_SETAHUN;
+      const lamaMk = lamaKas + lamaPiutang + lamaPersediaan;
+      const perputaranMk = HARI_SETAHUN / lamaMk;
+      const kebutuhanSekarang = penjualan / perputaranMk;
+      const kebutuhanMk = kebutuhanSekarang;
+      const modalKerjaAda = totalAktivaLancar - disponibleKredit;
+      const kebutuhanBersih = kebutuhanMk - modalKerjaAda;
+      const limitMaksimal = kebutuhanBersih + pembayaranPihakLain;
+
+      return {
+        jenisKredit: 'non-kpp',
+        kasBank,
+        penjualan,
+        piutang,
+        persediaan,
+        hpp,
+        totalAktivaLancar,
+        disponibleKredit,
+        pembayaranPihakLain,
+        lamaKas,
+        lamaPiutang,
+        lamaPersediaan,
+        lamaMk,
+        perputaranMk,
+        kebutuhanSekarang,
+        kebutuhanMk,
+        modalKerjaAda,
+        kebutuhanBersih,
+        limitMaksimal,
+        tenorAngsuranBulan
+      };
+    }
+
+    function hitungKMK() {
+      if (!validasiInput()) return null;
+
+      const jenisKredit = getSelectedJenisKredit();
+      hasilTerakhir = jenisKredit === 'non-kpp' ? hitungNonKpp() : hitungKpp(jenisKredit);
 
       renderHasil(hasilTerakhir);
       scrollToResults();
@@ -1016,22 +1312,48 @@
 
     // 5. Results renderer
     function renderHasil(hasil) {
-      getEl('hasilDoi').textContent = Math.round(hasil.doi) + ' hari';
-      getEl('hasilDor').textContent = Math.round(hasil.dor) + ' hari';
-      getEl('hasilDop').textContent = Math.round(hasil.dop) + ' hari';
-      getEl('hasilCtocHari').textContent = Math.round(hasil.ctocHari) + ' hari';
-      getEl('hasilCtocBulan').textContent = formatNumber(hasil.ctocBulan, 2) + ' bulan';
-      getEl('hasilPenjualanBulanan').textContent = formatRupiah(hasil.nilaiPenjualanBulanan);
-      getEl('hasilPenjualanCtoc').textContent = formatRupiah(hasil.nilaiPenjualanCtoc);
-      getEl('hasilLimit').textContent = formatRupiah(hasil.limitMaksimal);
+      const isCccProduct = hasil.jenisKredit !== 'non-kpp';
+      getEl('hasilKpp').style.display = isCccProduct ? 'block' : 'none';
+      getEl('hasilNonKpp').style.display = isCccProduct ? 'none' : 'block';
 
       const warningBox = getEl('warningBox');
-      if (hasil.ctocHari <= 0) {
-        warningBox.textContent = 'Cash to Cash bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena hutang usaha melebihi siklus persediaan dan piutang.';
-        warningBox.style.display = 'flex';
+      if (isCccProduct) {
+        getEl('hasilDoi').textContent = Math.round(hasil.doi) + ' hari';
+        getEl('hasilDor').textContent = Math.round(hasil.dor) + ' hari';
+        getEl('hasilDop').textContent = Math.round(hasil.dop) + ' hari';
+        getEl('hasilCtocHari').textContent = Math.round(hasil.ctocHari) + ' hari';
+        getEl('hasilCtocBulan').textContent = formatNumber(hasil.ctocBulan, 2) + ' bulan';
+        getEl('hasilPenjualanBulanan').textContent = formatRupiah(hasil.nilaiPenjualanBulanan);
+        getEl('hasilPenjualanCtoc').textContent = formatRupiah(hasil.nilaiPenjualanCtoc);
+        getEl('hasilLimit').textContent = formatRupiah(hasil.limitMaksimal);
+
+        if (hasil.ctocHari <= 0) {
+          warningBox.textContent = 'Cash to Cash bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena hutang usaha melebihi siklus persediaan dan piutang.';
+          warningBox.style.display = 'flex';
+        } else {
+          warningBox.textContent = '';
+          warningBox.style.display = 'none';
+        }
       } else {
-        warningBox.textContent = '';
-        warningBox.style.display = 'none';
+        getEl('hasilLamaKas').textContent = Math.round(hasil.lamaKas) + ' hari';
+        getEl('hasilLamaPiutang').textContent = Math.round(hasil.lamaPiutang) + ' hari';
+        getEl('hasilLamaPersediaan').textContent = Math.round(hasil.lamaPersediaan) + ' hari';
+        getEl('hasilLamaMk').textContent = Math.round(hasil.lamaMk) + ' hari';
+        getEl('hasilPerputaranMk').textContent = formatNumber(hasil.perputaranMk, 2) + ' kali';
+        getEl('hasilKebutuhanSekarang').textContent = formatRupiah(hasil.kebutuhanSekarang);
+        getEl('hasilKebutuhanMk').textContent = formatRupiah(hasil.kebutuhanMk);
+        getEl('hasilModalKerjaAda').textContent = formatRupiah(hasil.modalKerjaAda);
+        getEl('hasilKebutuhanBersih').textContent = formatRupiah(hasil.kebutuhanBersih);
+        getEl('hasilPembayaranPihakLain').textContent = formatRupiah(hasil.pembayaranPihakLain);
+        getEl('hasilLimitNonKpp').textContent = formatRupiah(hasil.limitMaksimal);
+
+        if (hasil.limitMaksimal <= 0) {
+          warningBox.textContent = 'Jumlah kebutuhan Kredit Modal Kerja bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena modal kerja yang tersedia sudah mencukupi kebutuhan.';
+          warningBox.style.display = 'flex';
+        } else {
+          warningBox.textContent = '';
+          warningBox.style.display = 'none';
+        }
       }
 
       getEl('hasilSection').style.display = 'block';
@@ -1206,6 +1528,9 @@
       document.querySelectorAll('.rupiah-input').forEach((el) => {
         el.addEventListener('input', handleRupiahInput);
       });
+
+      getEl('jenisKredit').addEventListener('change', syncProductForm);
+      syncProductForm();
 
       const npwpNasabah = getEl('npwpNasabah');
       if (npwpNasabah) npwpNasabah.addEventListener('input', handleNpwpInput);
