@@ -342,13 +342,34 @@
 
     .warning-box {
       display: none;
-      padding: 12px;
-      border: 1px solid #f59e0b;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border: 1px solid #fbbf24;
       border-radius: 8px;
       background: #fffbeb;
       color: #92400e;
       font-size: 13px;
-      line-height: 1.5;
+      font-weight: 500;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .warning-box::before {
+      content: "!";
+      display: grid;
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      place-items: center;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: #f59e0b;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     /* 9. BUTTONS */
@@ -1007,7 +1028,7 @@
       const warningBox = getEl('warningBox');
       if (hasil.ctocHari <= 0) {
         warningBox.textContent = 'Cash to Cash bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena hutang usaha melebihi siklus persediaan dan piutang.';
-        warningBox.style.display = 'block';
+        warningBox.style.display = 'flex';
       } else {
         warningBox.textContent = '';
         warningBox.style.display = 'none';
