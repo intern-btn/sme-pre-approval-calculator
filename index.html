@@ -405,7 +405,9 @@
     }
 
     #formNonKpp,
-    #hasilNonKpp {
+    #hasilNonKpp,
+    #formKur,
+    #hasilKur {
       display: none;
     }
 
@@ -591,8 +593,9 @@
         <div class="field">
           <label for="jenisKredit">Pilih Produk Kredit Modal Kerja</label>
           <select id="jenisKredit">
-            <option value="kpp">KUR Perumahan (Untuk Developer, Toko Bangunan, dan Kontraktor Perumahan)</option>
-            <option value="non-kpp">Non KUR Perumahan</option>
+            <option value="kpp">KMK Toko Bangunan</option>
+            <option value="non-kpp">KUMK Reguler</option>
+            <option value="kur">KUR Reguler</option>
           </select>
         </div>
       </section>
@@ -779,6 +782,52 @@
             <input type="text" id="pembayaranPihakLain" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 0" />
           </div>
         </div>
+        <div class="form-grid" id="formKur">
+          <div class="field">
+            <label for="kurSektor">Sektor Usaha</label>
+            <select id="kurSektor">
+              <option value="">Pilih Sektor</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="kurJenisUsaha">Jenis Usaha</label>
+            <select id="kurJenisUsaha">
+              <option value="">Pilih Jenis Usaha</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="kurLokasi">Lokasi Usaha</label>
+            <select id="kurLokasi">
+              <option value="10 Ibukota Provinsi">10 Ibukota Provinsi</option>
+              <option value="Ibukota Provinsi Lainnya">Ibukota Provinsi Lainnya</option>
+              <option value="Daerah Lainnya" selected>Daerah Lainnya</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="kurNorma">Norma Pajak (NPPN) % <span id="kurNormaNote" style="font-weight:400;text-transform:none;font-size:11px"></span></label>
+            <input type="text" id="kurNorma" inputmode="decimal" placeholder="Otomatis terisi setelah memilih jenis usaha" readonly />
+          </div>
+          <div class="field">
+            <label for="kurPenjualanBulan">Penjualan Rata-rata per Bulan</label>
+            <input type="text" id="kurPenjualanBulan" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 11.000.000" />
+          </div>
+          <div class="field">
+            <label for="kurBiayaRT">Biaya Rumah Tangga per Bulan</label>
+            <input type="text" id="kurBiayaRT" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 2.000.000" />
+          </div>
+          <div class="field">
+            <label for="kurSkalaUsaha">Skala Usaha</label>
+            <select id="kurSkalaUsaha">
+              <option value="mikro">Usaha Mikro (DSR 50%)</option>
+              <option value="kecil" selected>Usaha Kecil (DSR 60%)</option>
+              <option value="menengah">Usaha Menengah (DSR 70%)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="kurAngsuranEksisting">Angsuran Eksisting di Bank Lain per Bulan</label>
+            <input type="text" id="kurAngsuranEksisting" inputmode="numeric" class="rupiah-input" placeholder="Contoh: 0" />
+          </div>
+        </div>
       </section>
 
       <section class="card">
@@ -792,6 +841,7 @@
             <option value="24">2 Tahun</option>
             <option value="36">3 Tahun</option>
             <option value="48">4 Tahun</option>
+            <option value="60">5 Tahun</option>
           </select>
         </div>
       </section>
@@ -926,6 +976,74 @@
           </div>
         </div>
 
+        <div id="hasilKur">
+          <div class="result-section">
+            <h3>Pendapatan Bersih</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Penjualan rata-rata/tahun</div>
+                <div class="result-value" id="hasilKurPenjualanTahunan">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Norma Pajak (NPPN)</div>
+                <div class="result-value" id="hasilKurNorma">0%</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Pendapatan Bersih NPPN/bulan</div>
+                <div class="result-value" id="hasilKurPbNppnBulan">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Biaya Rumah Tangga/bulan</div>
+                <div class="result-value" id="hasilKurBiayaRT">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Pendapatan Bersih/bulan</div>
+                <div class="result-value" id="hasilKurPendapatanBersih">Rp0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h3>Analisa RPC</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">DSR (Debt Service Ratio)</div>
+                <div class="result-value" id="hasilKurDsr">0%</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Repayment Capacity</div>
+                <div class="result-value" id="hasilKurRc">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Angsuran Eksisting/bulan</div>
+                <div class="result-value" id="hasilKurAngsuranEks">Rp0</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Maks. Angsuran KUR BTN/bulan</div>
+                <div class="result-value" id="hasilKurMaxAngsuran">Rp0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h3>Parameter KUR</h3>
+            <div class="result-table">
+              <div class="result-row">
+                <div class="result-label">Suku Bunga KUR</div>
+                <div class="result-value">6% per tahun</div>
+              </div>
+              <div class="result-row">
+                <div class="result-label">Jangka Waktu</div>
+                <div class="result-value" id="hasilKurTenor">0 bulan</div>
+              </div>
+            </div>
+            <div class="limit-highlight">
+              <div class="result-label">Estimasi Plafon KUR Reguler</div>
+              <div class="result-value" id="hasilKurLimit">Rp0</div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       <!-- PRINT BUTTON (hidden by default) -->
@@ -950,6 +1068,78 @@
     const HARI_PER_BULAN = 30;
     const BULAN_SETAHUN = 12;
     const LIMIT_FACTOR = 0.80;
+    const KUR_BUNGA_TAHUNAN = 0.06;
+    const KUR_PLAFON_MAKS = 500_000_000;
+
+    // NPPN lookup table (from Drop down sheet, PT KUR Lampiran 24)
+    // Values are decimals (e.g. 0.30 = 30%). 'cek' means user must fill manually.
+    const NPPN_DATA = {
+      'Perdagangan': {
+        'Perdagangan kelontong/sembako/toserba': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Perdagangan hasil pertanian': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Perdagangan hasil peternakan': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Perdagangan hasil perikanan': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Perdagangan pakaian/tekstil': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Perdagangan sepatu/sandal': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Perdagangan aksesoris/fashion': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Perdagangan elektronik/gadget': { '10 Ibukota Provinsi': 0.20, 'Ibukota Provinsi Lainnya': 0.15, 'Daerah Lainnya': 0.10 },
+        'Perdagangan furniture/meubel': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Oleh-Oleh': { '10 Ibukota Provinsi': 'cek', 'Ibukota Provinsi Lainnya': 'cek', 'Daerah Lainnya': 'cek' },
+        'Perdagangan lainnya': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 }
+      },
+      'Rumah Makan / Kuliner': {
+        'Restoran/Rumah makan': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Warung/Kedai makan': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Katering': { '10 Ibukota Provinsi': 0.28, 'Ibukota Provinsi Lainnya': 0.22, 'Daerah Lainnya': 0.18 },
+        'Usaha kue/roti/bakery': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Kedai kopi/minuman': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Kuliner lainnya': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 }
+      },
+      'Bengkel & Reparasi': {
+        'Bengkel motor': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 },
+        'Bengkel mobil': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 },
+        'Reparasi elektronik': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 },
+        'Bengkel & reparasi lainnya': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 }
+      },
+      'Jasa Kecantikan': {
+        'Salon kecantikan': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Barbershop': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Spa/refleksi': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Jasa kecantikan lainnya': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 }
+      },
+      'Jasa Binatu (Laundry)': {
+        'Laundry kiloan': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Dry cleaning': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Jasa binatu lainnya': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 }
+      },
+      'Kesehatan': {
+        'Apotek': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Klinik/praktek dokter': { '10 Ibukota Provinsi': 0.45, 'Ibukota Provinsi Lainnya': 0.40, 'Daerah Lainnya': 0.35 },
+        'Optik': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 },
+        'Kesehatan lainnya': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 }
+      },
+      'Akomodasi & Logistik': {
+        'Kos-kosan/kontrakan': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Guest house/penginapan': { '10 Ibukota Provinsi': 0.50, 'Ibukota Provinsi Lainnya': 0.45, 'Daerah Lainnya': 0.40 },
+        'Jasa ekspedisi/kurir': { '10 Ibukota Provinsi': 0.30, 'Ibukota Provinsi Lainnya': 0.25, 'Daerah Lainnya': 0.20 },
+        'Rental kendaraan': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 },
+        'Akomodasi & logistik lainnya': { '10 Ibukota Provinsi': 0.40, 'Ibukota Provinsi Lainnya': 0.35, 'Daerah Lainnya': 0.30 }
+      },
+      'Toko Bangunan': {
+        'Toko material bangunan': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Toko cat & finishing': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 },
+        'Toko bangunan lainnya': { '10 Ibukota Provinsi': 0.25, 'Ibukota Provinsi Lainnya': 0.20, 'Daerah Lainnya': 0.15 }
+      },
+      'Kontraktor': {
+        'Kontraktor bangunan': { '10 Ibukota Provinsi': 0.15, 'Ibukota Provinsi Lainnya': 0.12, 'Daerah Lainnya': 0.10 },
+        'Kontraktor listrik/ME': { '10 Ibukota Provinsi': 0.15, 'Ibukota Provinsi Lainnya': 0.12, 'Daerah Lainnya': 0.10 },
+        'Kontraktor lainnya': { '10 Ibukota Provinsi': 0.15, 'Ibukota Provinsi Lainnya': 0.12, 'Daerah Lainnya': 0.10 }
+      },
+      'Developer / Konstruksi': {
+        'Developer perumahan': { '10 Ibukota Provinsi': 'cek', 'Ibukota Provinsi Lainnya': 'cek', 'Daerah Lainnya': 'cek' },
+        'Developer konstruksi lainnya': { '10 Ibukota Provinsi': 'cek', 'Ibukota Provinsi Lainnya': 'cek', 'Daerah Lainnya': 'cek' }
+      }
+    };
 
     // Google Sheets endpoint — paste your Apps Script Web App URL here
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwU8TCrVA7HVb0twuSoOs-KKQ57j0rOvUWH5llc_1CvfSmD7Yw8Ro7x5eY1azX_Jnr7/exec';
@@ -998,6 +1188,17 @@
         kebutuhanBersih:       hasil.kebutuhanBersih,
         limitMaksimal:         hasil.limitMaksimal,
         tenorAngsuranBulan:    hasil.tenorAngsuranBulan,
+        kurSektor:             getEl('kurSektor')?.value || '',
+        kurJenisUsaha:         getEl('kurJenisUsaha')?.value || '',
+        kurLokasi:             getEl('kurLokasi')?.value || '',
+        kurNorma:              parseFloat(getEl('kurNorma')?.value) || 0,
+        kurPenjualanBulan:     parseRupiah(getEl('kurPenjualanBulan')?.value),
+        kurBiayaRT:            parseRupiah(getEl('kurBiayaRT')?.value),
+        kurSkalaUsaha:         getEl('kurSkalaUsaha')?.value || '',
+        kurDsr:                hasil.dsr || 0,
+        kurRepaymentCapacity:  hasil.repaymentCapacity || 0,
+        kurAngsuranEks:        hasil.angsuranEks || 0,
+        kurMaxAngsuranBTN:     hasil.maxAngsuranBTN || 0,
         statusKelayakan:       hasil.limitMaksimal > 0 ? 'Layak' : 'Belum Layak'
       };
       fetch(SHEET_URL, {
@@ -1145,9 +1346,10 @@
     }
 
     function syncProductForm() {
-      const isCccProduct = getSelectedJenisKredit() !== 'non-kpp';
-      getEl('formKpp').style.display = isCccProduct ? 'grid' : 'none';
-      getEl('formNonKpp').style.display = isCccProduct ? 'none' : 'grid';
+      const jenis = getSelectedJenisKredit();
+      getEl('formKpp').style.display = jenis === 'kpp' ? 'grid' : 'none';
+      getEl('formNonKpp').style.display = jenis === 'non-kpp' ? 'grid' : 'none';
+      getEl('formKur').style.display = jenis === 'kur' ? 'grid' : 'none';
       getEl('hasilSection').style.display = 'none';
       getEl('btnCetak').style.display = 'none';
       hasilTerakhir = null;
@@ -1166,15 +1368,8 @@
         ['nikNasabah', 'NIK wajib diisi.'],
         ['npwpNasabah', 'NPWP wajib diisi.']
       ];
-      const requiredCurrency = jenisKredit !== 'non-kpp'
+      const requiredCurrency = jenisKredit === 'non-kpp'
         ? [
-          ['persediaan', 'Persediaan wajib diisi.'],
-          ['hpp', 'HPP / COGS wajib diisi.'],
-          ['piutangUsaha', 'Piutang Usaha wajib diisi.'],
-          ['penjualan', 'Penjualan tahunan wajib diisi.'],
-          ['hutangUsaha', 'Hutang Usaha wajib diisi.']
-        ]
-        : [
           ['kasBank', 'Rata-rata Kas/Bank wajib diisi.'],
           ['penjualanNonKpp', 'Total Penjualan Tahunan wajib diisi.'],
           ['piutangNonKpp', 'Rata-rata Piutang wajib diisi.'],
@@ -1183,6 +1378,19 @@
           ['totalAktivaLancar', 'Total Aktiva Lancar wajib diisi.'],
           ['disponibleKredit', 'Disponible Kredit wajib diisi.'],
           ['pembayaranPihakLain', 'Pembayaran/Pelunasan kepada Pihak Lain wajib diisi.']
+        ]
+        : jenisKredit === 'kur'
+        ? [
+          ['kurPenjualanBulan', 'Penjualan rata-rata per bulan wajib diisi.'],
+          ['kurBiayaRT', 'Biaya rumah tangga per bulan wajib diisi.'],
+          ['kurAngsuranEksisting', 'Angsuran eksisting wajib diisi (isi 0 jika tidak ada).']
+        ]
+        : [
+          ['persediaan', 'Persediaan wajib diisi.'],
+          ['hpp', 'HPP / COGS wajib diisi.'],
+          ['piutangUsaha', 'Piutang Usaha wajib diisi.'],
+          ['penjualan', 'Penjualan tahunan wajib diisi.'],
+          ['hutangUsaha', 'Hutang Usaha wajib diisi.']
         ];
 
       requiredText.forEach(([id, message]) => {
@@ -1218,7 +1426,26 @@
         }
       });
 
-      if (jenisKredit !== 'non-kpp') {
+      if (jenisKredit === 'kur') {
+        if (!getEl('kurSektor')?.value) {
+          errors.push('Sektor Usaha wajib dipilih.');
+          markError('kurSektor');
+        }
+        if (!getEl('kurJenisUsaha')?.value) {
+          errors.push('Jenis Usaha wajib dipilih.');
+          markError('kurJenisUsaha');
+        }
+        const normaVal = parseFloat(getEl('kurNorma')?.value);
+        if (!getEl('kurNorma')?.value.trim() || isNaN(normaVal) || normaVal <= 0) {
+          errors.push('Norma Pajak (NPPN) wajib diisi dan harus lebih dari 0%.');
+          markError('kurNorma');
+        }
+        const penjualanKur = parseRupiah(getEl('kurPenjualanBulan')?.value);
+        if (getEl('kurPenjualanBulan')?.value.trim() && penjualanKur === 0) {
+          errors.push('Penjualan rata-rata per bulan tidak boleh 0.');
+          markError('kurPenjualanBulan');
+        }
+      } else if (jenisKredit === 'kpp') {
         const hpp = parseRupiah(getEl('hpp')?.value);
         const penjualan = parseRupiah(getEl('penjualan')?.value);
 
@@ -1356,11 +1583,54 @@
       };
     }
 
+    function hitungKur() {
+      const norma = parseFloat(getEl('kurNorma').value) / 100;
+      const penjualanBulan = parseRupiah(getEl('kurPenjualanBulan').value);
+      const biayaRT = parseRupiah(getEl('kurBiayaRT').value);
+      const angsuranEks = parseRupiah(getEl('kurAngsuranEksisting').value);
+      const skala = getEl('kurSkalaUsaha').value;
+      const tenorAngsuranBulan = getSelectedTenorAngsuran();
+
+      const penjualanTahunan = penjualanBulan * BULAN_SETAHUN;
+      const pbNppnTahunan = penjualanTahunan * norma;
+      const pbNppnBulan = pbNppnTahunan / BULAN_SETAHUN;
+      const pendapatanBersih = pbNppnBulan - biayaRT;
+
+      const dsr = skala === 'mikro' ? 0.50 : skala === 'kecil' ? 0.60 : 0.70;
+      const repaymentCapacity = dsr * pendapatanBersih;
+      const maxAngsuranBTN = repaymentCapacity - angsuranEks;
+
+      let limitMaksimal = 0;
+      if (maxAngsuranBTN > 0) {
+        const bungaBulan = KUR_BUNGA_TAHUNAN / BULAN_SETAHUN;
+        const pv = maxAngsuranBTN * (1 - Math.pow(1 + bungaBulan, -tenorAngsuranBulan)) / bungaBulan;
+        limitMaksimal = Math.min(Math.round(pv), KUR_PLAFON_MAKS);
+      }
+
+      return {
+        jenisKredit: 'kur',
+        norma,
+        penjualanBulan,
+        penjualanTahunan,
+        pbNppnBulan,
+        biayaRT,
+        pendapatanBersih,
+        dsr,
+        repaymentCapacity,
+        angsuranEks,
+        maxAngsuranBTN,
+        limitMaksimal,
+        tenorAngsuranBulan
+      };
+    }
+
     function hitungKMK() {
       if (!validasiInput()) return null;
 
       const jenisKredit = getSelectedJenisKredit();
-      hasilTerakhir = jenisKredit === 'non-kpp' ? hitungNonKpp() : hitungKpp(jenisKredit);
+      hasilTerakhir = jenisKredit === 'non-kpp' ? hitungNonKpp()
+                    : jenisKredit === 'kur'     ? hitungKur()
+                    : hitungKpp(jenisKredit);
 
       renderHasil(hasilTerakhir);
       scrollToResults();
@@ -1370,12 +1640,14 @@
 
     // 5. Results renderer
     function renderHasil(hasil) {
-      const isCccProduct = hasil.jenisKredit !== 'non-kpp';
-      getEl('hasilKpp').style.display = isCccProduct ? 'block' : 'none';
-      getEl('hasilNonKpp').style.display = isCccProduct ? 'none' : 'block';
+      const jenis = hasil.jenisKredit;
+      getEl('hasilKpp').style.display    = jenis === 'kpp' ? 'block' : 'none';
+      getEl('hasilNonKpp').style.display = jenis === 'non-kpp' ? 'block' : 'none';
+      getEl('hasilKur').style.display    = jenis === 'kur' ? 'block' : 'none';
 
       const warningBox = getEl('warningBox');
-      if (isCccProduct) {
+
+      if (jenis === 'kpp') {
         getEl('hasilDoi').textContent = Math.round(hasil.doi) + ' hari';
         getEl('hasilDor').textContent = Math.round(hasil.dor) + ' hari';
         getEl('hasilDop').textContent = Math.round(hasil.dop) + ' hari';
@@ -1392,7 +1664,7 @@
           warningBox.textContent = '';
           warningBox.style.display = 'none';
         }
-      } else {
+      } else if (jenis === 'non-kpp') {
         getEl('hasilLamaKas').textContent = Math.round(hasil.lamaKas) + ' hari';
         getEl('hasilLamaPiutang').textContent = Math.round(hasil.lamaPiutang) + ' hari';
         getEl('hasilLamaPersediaan').textContent = Math.round(hasil.lamaPersediaan) + ' hari';
@@ -1407,6 +1679,26 @@
 
         if (hasil.limitMaksimal <= 0) {
           warningBox.textContent = 'Jumlah kebutuhan Kredit Modal Kerja bernilai 0 atau negatif. Hasil dapat terlihat tidak umum karena modal kerja yang tersedia sudah mencukupi kebutuhan.';
+          warningBox.style.display = 'flex';
+        } else {
+          warningBox.textContent = '';
+          warningBox.style.display = 'none';
+        }
+      } else {
+        getEl('hasilKurPenjualanTahunan').textContent = formatRupiah(hasil.penjualanTahunan);
+        getEl('hasilKurNorma').textContent = formatNumber(hasil.norma * 100, 2) + '%';
+        getEl('hasilKurPbNppnBulan').textContent = formatRupiah(hasil.pbNppnBulan);
+        getEl('hasilKurBiayaRT').textContent = formatRupiah(hasil.biayaRT);
+        getEl('hasilKurPendapatanBersih').textContent = formatRupiah(hasil.pendapatanBersih);
+        getEl('hasilKurDsr').textContent = formatNumber(hasil.dsr * 100, 0) + '%';
+        getEl('hasilKurRc').textContent = formatRupiah(hasil.repaymentCapacity);
+        getEl('hasilKurAngsuranEks').textContent = formatRupiah(hasil.angsuranEks);
+        getEl('hasilKurMaxAngsuran').textContent = formatRupiah(Math.max(0, hasil.maxAngsuranBTN));
+        getEl('hasilKurTenor').textContent = formatTenorDisplay(hasil.tenorAngsuranBulan);
+        getEl('hasilKurLimit').textContent = formatRupiah(hasil.limitMaksimal);
+
+        if (hasil.limitMaksimal <= 0 || hasil.maxAngsuranBTN <= 0) {
+          warningBox.textContent = 'Repayment Capacity tidak mencukupi angsuran eksisting. Estimasi plafon KUR adalah Rp0.';
           warningBox.style.display = 'flex';
         } else {
           warningBox.textContent = '';
@@ -1442,12 +1734,7 @@
       const kantorCabangTujuan = getEl('kantorCabangTujuan')?.value || '-';
       const tanggal = getTanggalSurat();
 
-      return `<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Surat Simulasi KMK BTN</title>
-  <style>
+      const sharedStyles = `
     @page { size: A4 portrait; margin: 25mm; }
     body {
       margin: 0;
@@ -1456,61 +1743,79 @@
       font-size: 12pt;
       line-height: 1.2;
     }
-    .print-letter {
-      width: 100%;
-    }
-    p {
-      margin: 0 0 8pt;
-      text-align: justify;
-    }
-    .right {
-      text-align: right;
-      margin-bottom: 18pt;
-    }
-    .spaced {
-      margin-bottom: 14pt;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 8pt 0 14pt;
-    }
-    td {
-      padding: 3pt 4pt;
-      vertical-align: top;
-    }
-    td:first-child {
-      width: 190pt;
-    }
-    td:nth-child(2) {
-      width: 10pt;
-    }
-    .term-section {
-      margin: 12pt 0 12pt;
-    }
-    .term-heading {
-      margin-bottom: 6pt;
-      font-weight: bold;
-    }
-    .requirements {
-      margin: 0 0 8pt 20pt;
-      padding-left: 12pt;
-    }
-    .requirements li {
-      margin-bottom: 4pt;
-      text-align: justify;
-    }
-    .signature {
-      margin-top: 28pt;
-      width: 50%;
-      margin-left: 50%;
-      text-align: center;
-    }
-    .signature p {
-      margin-bottom: 0;
-      text-align: center;
-    }
-  </style>
+    .print-letter { width: 100%; }
+    p { margin: 0 0 8pt; text-align: justify; }
+    .right { text-align: right; margin-bottom: 18pt; }
+    .spaced { margin-bottom: 14pt; }
+    table { width: 100%; border-collapse: collapse; margin: 8pt 0 14pt; }
+    td { padding: 3pt 4pt; vertical-align: top; }
+    td:first-child { width: 190pt; }
+    td:nth-child(2) { width: 10pt; }
+    .term-section { margin: 12pt 0 12pt; }
+    .term-heading { margin-bottom: 6pt; font-weight: bold; }
+    .requirements { margin: 0 0 8pt 20pt; padding-left: 12pt; }
+    .requirements li { margin-bottom: 4pt; text-align: justify; }
+    .signature { margin-top: 28pt; width: 50%; margin-left: 50%; text-align: center; }
+    .signature p { margin-bottom: 0; text-align: center; }`;
+
+      if (hasil.jenisKredit === 'kur') {
+        return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surat Simulasi KUR BTN</title>
+  <style>${sharedStyles}</style>
+</head>
+<body>
+  <div class="print-letter">
+    <p class="right">${tanggal.tanggalLengkap}</p>
+
+    <p><b>Nomor</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${nomorSurat}</p>
+    <p class="spaced"><b>Lamp</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
+
+    <p><b>Kepada Yth.</b></p>
+    <p><b>Bapak/Ibu, ${escapeHtml(namaNasabah)}</b></p>
+    <p class="spaced"><b>Perihal &nbsp;&nbsp;&nbsp;&nbsp;: Simulasi Estimasi Plafon KUR Reguler</b></p>
+
+    <p>Dengan Hormat,</p>
+    <p>Berdasarkan data usaha yang disampaikan, berikut estimasi perkiraan plafon Kredit Usaha Rakyat (KUR) Reguler yang dapat menjadi bahan awal pengajuan fasilitas kredit di Bank BTN.</p>
+
+    <div class="term-section">
+      <div class="term-heading">Fasilitas Kredit</div>
+      <table>
+        <tr><td>Limit Kredit</td><td>:</td><td>&plusmn; ${formatRupiah(hasil.limitMaksimal)}</td></tr>
+        <tr><td>Peruntukkan</td><td>:</td><td>Modal Kerja</td></tr>
+        <tr><td>Jangka Waktu</td><td>:</td><td>${formatTenorDisplay(hasil.tenorAngsuranBulan)}</td></tr>
+        <tr><td>Suku Bunga</td><td>:</td><td>6% per tahun (per Permenko No. 1 Tahun 2026)</td></tr>
+      </table>
+    </div>
+
+    <p>Hasil simulasi ini hanya merupakan estimasi awal dan bukan persetujuan kredit. Keputusan akhir akan ditentukan berdasarkan analisis dan kebijakan Bank BTN.</p>
+    <p>Untuk keperluan analisa lebih lanjut, Kami harapkan kesediaan ${escapeHtml(namaNasabah)} untuk dapat menyampaikan beberapa hal sebagai berikut :</p>
+    <ol class="requirements">
+      <li>Surat Permohonan.</li>
+      <li>Copy Dokumen Identitas (KTP/KK) dan dokumen pendukung lainnya.</li>
+      <li>Copy Dokumen Legalitas Usaha meliputi NIB, SIUP, atau Surat Keterangan Usaha dari kelurahan/desa.</li>
+      <li>Copy Dokumen Keuangan meliputi catatan omzet usaha dan dokumen relevan lainnya.</li>
+    </ol>
+    <p>Syarat dan ketentuan diatas merupakan suatu indikasi atas penawaran fasilitas kredit dan tidak bersifat mengikat (subject to review), serta dapat dibiayai sepanjang feasible dan bankable menurut penilaian Bank BTN. Penawaran/persetujuan final akan kami sampaikan kemudian setelah mendapat keputusan sesuai dengan ketentuan yang berlaku.</p>
+    <p>Demikian kami sampaikan, atas perhatian dan Kerjasama Saudara kami ucapkan terima kasih.</p>
+
+    <div class="signature">
+      <p><b>PT. BANK TABUNGAN NEGARA (Persero), Tbk.</b></p>
+      <p><b>KC ${escapeHtml(kantorCabangTujuan)}</b></p>
+    </div>
+  </div>
+</body>
+</html>`;
+      }
+
+      return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surat Simulasi KMK BTN</title>
+  <style>${sharedStyles}</style>
 </head>
 <body>
   <div class="print-letter">
@@ -1561,10 +1866,13 @@
       const hasil = hasilTerakhir || hitungKMK();
       if (!hasil) return;
 
-      const counter = parseInt(localStorage.getItem('suratKMKCounter') || '0', 10) + 1;
-      localStorage.setItem('suratKMKCounter', String(counter));
+      const isKur = hasil.jenisKredit === 'kur';
+      const counterKey = isKur ? 'suratKURCounter' : 'suratKMKCounter';
+      const suratKode = isKur ? 'KUR' : 'KMK';
+      const counter = parseInt(localStorage.getItem(counterKey) || '0', 10) + 1;
+      localStorage.setItem(counterKey, String(counter));
       const tanggal = getTanggalSurat();
-      const nomorSurat = String(counter).padStart(3, '0') + '/S/KMK/' + tanggal.bulanRomawi + '/' + tanggal.yyyy;
+      const nomorSurat = String(counter).padStart(3, '0') + '/S/' + suratKode + '/' + tanggal.bulanRomawi + '/' + tanggal.yyyy;
 
       kirimKeSheet(hasil, nomorSurat);
 
@@ -1614,6 +1922,52 @@
 
       getEl('btnHitung').addEventListener('click', hitungKMK);
       getEl('btnCetak').addEventListener('click', cetakHasil);
+
+      // KUR NPPN cascade
+      const sektorEl = getEl('kurSektor');
+      Object.keys(NPPN_DATA).forEach(function(sektor) {
+        const opt = document.createElement('option');
+        opt.value = sektor;
+        opt.textContent = sektor;
+        sektorEl.appendChild(opt);
+      });
+
+      function updateJenisUsahaOptions() {
+        const sektor = getEl('kurSektor').value;
+        const jenisEl = getEl('kurJenisUsaha');
+        jenisEl.innerHTML = '<option value="">Pilih Jenis Usaha</option>';
+        if (!sektor) { updateNormaPajak(); return; }
+        Object.keys(NPPN_DATA[sektor] || {}).forEach(function(usaha) {
+          const opt = document.createElement('option');
+          opt.value = usaha;
+          opt.textContent = usaha;
+          jenisEl.appendChild(opt);
+        });
+        updateNormaPajak();
+      }
+
+      function updateNormaPajak() {
+        const sektor = getEl('kurSektor').value;
+        const jenis  = getEl('kurJenisUsaha').value;
+        const lokasi = getEl('kurLokasi').value;
+        const normaEl = getEl('kurNorma');
+        const noteEl  = getEl('kurNormaNote');
+        if (!sektor || !jenis || !lokasi) { normaEl.value = ''; return; }
+        const val = (NPPN_DATA[sektor] || {})[jenis]?.[lokasi];
+        if (typeof val === 'number') {
+          normaEl.value = (val * 100).toString();
+          normaEl.readOnly = true;
+          noteEl.textContent = '';
+        } else {
+          normaEl.value = '';
+          normaEl.readOnly = false;
+          noteEl.textContent = '(isi manual — cek Peraturan Dirjen Pajak)';
+        }
+      }
+
+      sektorEl.addEventListener('change', updateJenisUsahaOptions);
+      getEl('kurJenisUsaha').addEventListener('change', updateNormaPajak);
+      getEl('kurLokasi').addEventListener('change', updateNormaPajak);
     });
   </script>
 </body>
